@@ -27,33 +27,27 @@ public class IOUState implements LinearState {
     public List<AbstractParty> participants;
     public UniqueIdentifier linearId;
 
-    public IOUState(Amount amount, Party lender, Party borrower) {
+    @ConstructorForDeserialization
+    private IOUState(Amount<Currency> amount, Party lender, Party borrower, Amount<Currency> paid, UniqueIdentifier linearId){
         this.amount = amount;
         this.lender = lender;
         this.borrower = borrower;
-        participants = new ArrayList<AbstractParty>();
-        participants.add(lender);
-        participants.add(borrower);
-        this.paid = Currencies.AMOUNT(0, this.amount.getToken());
-        this.linearId = new UniqueIdentifier();
+        this.paid = paid;
+        this.linearId = linearId;
     }
-    @ConstructorForDeserialization
-    private IOUState(Amount newAmount, Party newLender, IOUState oldIOU) {
-        this.amount = oldIOU.amount;
-        this.lender = newLender;
-        this.borrower = oldIOU.borrower;
-        this.participants = oldIOU.participants;
-        this.linearId = oldIOU.linearId;
-        this.paid = newAmount;
+
+    public IOUState(Amount<Currency> amount, Party lender, Party borrower) {
+        this(amount, lender, borrower, new Amount<>(0, amount.getToken()), new UniqueIdentifier());
+
     }
 
     public IOUState pay(Amount amount){
         Amount<Currency> newPaid = paid.plus(amount);
-        return new IOUState(newPaid, this.lender, this);
+        return new IOUState(amount, lender, borrower, newPaid, linearId);
     }
 
-    public IOUState withNewLender(Party lender){
-        return new IOUState(this.paid, lender, this);
+    public IOUState withNewLender(Party newLender){
+        return new IOUState(amount, newLender, borrower, paid, linearId);
     }
 
     public Amount<Currency> getPaid(){
@@ -72,7 +66,7 @@ public class IOUState implements LinearState {
      */
     @Override
     public List<AbstractParty> getParticipants() {
-        return participants;
+        return ImmutableList.of(lender, borrower);
     }
 
     @Override

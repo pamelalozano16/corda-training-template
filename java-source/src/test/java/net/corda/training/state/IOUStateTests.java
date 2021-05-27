@@ -197,19 +197,19 @@ public class IOUStateTests {
      * TODO: Ensure constructors are overloaded correctly.
      * This test serves as a sanity check that the two constructors have been implemented properly. If it fails, refer to the instructions of Tasks 8 and 10.
      */
-//    @Test
-//    public void correctConstructorsExist() {
-//        // Public constructor for new states
-//        try {
-//            Constructor<IOUState> contructor = IOUState.class.getConstructor(Amount.class, Party.class, Party.class);
-//        } catch( NoSuchMethodException nsme ) {
-//            fail("The correct public constructor does not exist!");
-//        }
-//        // Private constructor for updating states
-//        try {
-//            Constructor<IOUState> contructor = IOUState.class.getDeclaredConstructor(Amount.class, Party.class, Party.class, Amount.class, UniqueIdentifier.class);
-//        } catch( NoSuchMethodException nsme ) {
-//            fail("The correct private copy constructor does not exist!");
-//        }
-//    }
+    @Test
+    public void correctConstructorsExist() {
+        // Public constructor for new states
+        try {
+            Constructor<IOUState> contructor = IOUState.class.getConstructor(Amount.class, Party.class, Party.class);
+        } catch( NoSuchMethodException nsme ) {
+            fail("The correct public constructor does not exist!");
+        }
+        // Private constructor for updating states
+        try {
+            Constructor<IOUState> contructor = IOUState.class.getDeclaredConstructor(Amount.class, Party.class, Party.class, Amount.class, UniqueIdentifier.class);
+        } catch( NoSuchMethodException nsme ) {
+            fail("The correct private copy constructor does not exist!");
+        }
+    }
 }
